@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>母亲节快乐</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box;}
+body {
+  background: linear-gradient(to bottom, #fff5f8, #fde6ef);
+  min-height:100vh;
+  font-family:"微软雅黑",sans-serif;
+}
+
+.center-box {
+  position:fixed;
+  left:50%;
+  top:52%;
+  transform:translate(-50%, -50%);
+  text-align:center;
+  z-index:10;
+}
+.mom-name {
+  font-size:28px;
+  color:#e63968;
+  font-weight:bold;
+  margin-bottom:10px;
+  opacity:0;
+  transition:0.8s;
+}
+.title {
+  font-size:22px;
+  color:#9c4065;
+  opacity:0;
+  transition:0.8s;
+}
+
+.word-item {
+  position:absolute;
+  background:#fff;
+  padding:5px 10px;
+  border-radius:15px;
+  box-shadow:0 2px 6px rgba(230,57,104,0.15);
+  color:#d73867;
+  font-size:14px;
+  white-space:nowrap;
+  opacity:0;
+  transform:scale(0.3);
+  transition:0.5s;
+}
+</style>
+</head>
+
+<body>
+<div class="center-box">
+  <div class="mom-name">亲爱的老妈</div>
+  <div class="title">母亲节快乐 ❤️ 平安喜乐</div>
+</div>
+
+<script>
+const wordList = [
+  "福寿安康","岁岁平安","身体健康","笑口常开","万事如意",
+  "心想事成","平安喜乐","吉祥如意","阖家幸福","青春永驻"
+];
+const total = 40;
+let words = [];
+let momName = document.querySelector('.mom-name');
+let titleText = document.querySelector('.title');
+
+for(let i=0;i<total;i++){
+  let w = document.createElement('div');
+  w.className='word-item';
+  w.innerText=wordList[Math.floor(Math.random()*wordList.length)];
+  w.style.left=Math.random()*90+'vw';
+  w.style.top=Math.random()*90+'vh';
+  document.body.appendChild(w);
+  words.push(w);
+  setTimeout(()=>{w.style.opacity=1;w.style.transform='scale(1)'},i*100);
+}
+
+function heart(t){
+  let x=16*Math.sin(t)**3;
+  let y=-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));
+  return {x,y};
+}
+
+setTimeout(()=>{
+  let t=0;
+  let step=Math.PI*2/total;
+  for(let i=0;i<total;i++){
+    let p=heart(t);t+=step;
+    words[i].style.left=(50+p.x*2.2)+'%';
+    words[i].style.top=(52+p.y*2.2)+'%';
+    words[i].style.transform='scale(1.05)';
+    words[i].style.background='#fdd8e8';
+  }
+  momName.style.opacity=1;
+  setTimeout(()=>titleText.style.opacity=1,1000);
+},5000);
+</script>
+</body>
+</html>
