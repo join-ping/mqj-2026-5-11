@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>母亲节快乐</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", sans-serif;
+        }
+        /* 背景保持要求的颜色 */
+        body {
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #fbe7f0 0%, #e8f0fe 50%, #f0f7ff 100%);
+            overflow: hidden;
+            position: relative;
+        }
+        /* 开场页面 */
+        #start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f9eaf2, #e5f2ff);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            z-index: 9999;
+        }
+        .start-title {
+            font-size: 48px;
+            color: #d16baf;
+        }
+        #start-btn {
+            padding: 15px 40px;
+            font-size: 22px;
+            background: #d16baf;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        /* 成语样式 - 纯文字 统一大小 */
+        .blessing {
+            position: absolute;
+            font-size: 20px;
+            color: #d16baf;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.8s ease;
+            white-space: nowrap;
+            z-index: 10;
+        }
+        /* 移动到爱心位置的过渡（关键：平滑聚拢） */
+        .blessing.move {
+            transition: all 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        /* 中央文字容器 - 绝对居中 */
+        #center-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            text-align: center;
+            z-index: 20;
+            transition: all 1s ease;
+        }
+        .main-text {
+            font-size: 40px;
+            color: #d16baf;
+            margin-bottom: 15px;
+        }
+        .sub-text {
+            font-size: 24px;
+            color: #9477d6;
+        }
+    </style>
+</head>
+<body>
+    <!-- 开场界面 -->
+    <div id="start-screen">
+        <h1 class="start-title">祝妈妈母亲节快乐</h1>
+        <button id="start-btn">点击开启祝福</button>
+    </div>
+
+    <!-- 20个祝福成语 -->
+    <div class="blessing" id="b0">平安喜乐</div>
+    <div class="blessing" id="b1">健康长寿</div>
+    <div class="blessing" id="b2">笑口常开</div>
+    <div class="blessing" id="b3">幸福安康</div>
+    <div class="blessing" id="b4">岁岁平安</div>
+    <div class="blessing" id="b5">福寿双全</div>
+    <div class="blessing" id="b6">吉祥如意</div>
+    <div class="blessing" id="b7">感恩母爱</div>
+    <div class="blessing" id="b8">青春永驻</div>
+    <div class="blessing" id="b9">阖家欢乐</div>
+    <div class="blessing" id="b10">顺遂安康</div>
+    <div class="blessing" id="b11">温柔美好</div>
+    <div class="blessing" id="b12">喜乐无忧</div>
+    <div class="blessing" id="b13">福暖四季</div>
+    <div class="blessing" id="b14">万事如意</div>
+    <div class="blessing" id="b15">恩重如山</div>
+    <div class="blessing" id="b16">母爱如山</div>
+    <div class="blessing" id="b17">永远年轻</div>
+    <div class="blessing" id="b18">春晖寸草</div>
+    <div class="blessing" id="b19">一生顺遂</div>
+
+    <!-- 中央文字 -->
+    <div id="center-container">
+        <div class="main-text">母亲节快乐</div>
+        <div class="sub-text">愿您永远健康快乐 幸福常伴</div>
+    </div>
+
+    <script>
+        // 1. 初始化成语全屏随机位置（满屏弹窗效果）
+        const blessings = document.querySelectorAll('.blessing');
+        blessings.forEach((bless, index) => {
+            // 全屏随机位置，确保满屏分布
+            const x = Math.random() * 90 + 5;  // 5%-95%
+            const y = Math.random() * 90 + 5;  // 5%-95%
+            bless.style.left = x + '%';
+            bless.style.top = y + '%';
+        });
+
+        // 2. 标准爱心数学公式计算坐标（核心：精准爱心轮廓）
+        function getHeartPoint(angle) {
+            const t = angle * Math.PI / 10;  // 20个点，每个点18°
+            const x = 16 * Math.pow(Math.sin(t), 3);
+            const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+            // 缩放并居中到屏幕中央
+            return {
+                x: 50 + x * 2.5,  // 缩放系数，控制爱心大小
+                y: 50 - y * 2.5   // 反转y轴，爱心正向显示
+            };
+        }
+
+        // 生成20个精准的爱心坐标点
+        const heartPoints = [];
+        for(let i=0; i<20; i++) {
+            heartPoints.push(getHeartPoint(i));
+        }
+
+        // 3. 点击触发完整动画
+        document.getElementById('start-btn').addEventListener('click', function() {
+            document.getElementById('start-screen').style.display = 'none';
+
+            // 第一步：满屏弹窗显示所有成语（0.1秒间隔，满屏炸开）
+            blessings.forEach((bless, index) => {
+                setTimeout(() => {
+                    bless.style.opacity = '1';
+                    bless.style.transform = 'scale(1)';
+                }, index * 100);
+            });
+
+            // 第二步：2秒后，添加移动类，所有成语向爱心位置聚拢
+            setTimeout(() => {
+                blessings.forEach((bless, index) => {
+                    bless.classList.add('move');
+                    bless.style.left = heartPoints[index].x + '%';
+                    bless.style.top = heartPoints[index].y + '%';
+                });
+            }, 2000);
+
+            // 第三步：4秒后显示中央文字（爱心成型后）
+            setTimeout(() => {
+                const center = document.getElementById('center-container');
+                center.style.opacity = '1';
+                center.style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 4000);
+        });
+    </script>
+</body>
+</html>
+    
